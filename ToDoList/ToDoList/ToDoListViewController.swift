@@ -10,7 +10,10 @@ import UIKit
 
 class ToDoListViewController: UITableViewController {
     
-    let itemArray = ["Draw a design", "Buy groceries", "Sing a song"];
+    var itemArray = ["Draw a design", "Buy groceries", "Sing a song"];
+    
+    var alertTextFieldInput = UITextField()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,9 +34,45 @@ class ToDoListViewController: UITableViewController {
         return cell;
     }
     
-    //MARK: tableView didSelectRowAt
-
+    //MARK: add new items
     
+    @IBAction func addToDoItem(_ sender: UIBarButtonItem) {
+        
+        
+        
+        let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
+        let thisAction = UIAlertAction(title: "Add Item", style: .default) { (action) in
+             // what will happen when user clicks
+            
+            
+            if(self.alertTextFieldInput.text == "") {
+                 let alert2 = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
+                let oops = UIAlertAction(title: "Add Item", style: .default, handler: { (oopsies) in
+                    print("must add item...")
+                })
+                alert2.addAction(oops)
+                self.present(alert2, animated: true, completion: nil)
+                
+            } else {
+                print("success!")
+                self.itemArray.append(self.alertTextFieldInput.text!)
+                print(self.itemArray);
+                self.tableView.reloadData();
+            }
+            
+            
+        }
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "im doing this..."
+            //alertTextField.text
+            self.alertTextFieldInput = alertTextField;
+            //print(alertTextField.text)
+        }
+        alert.addAction(thisAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    //MARK: tableView didSelectRowAt
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         //select and deselect checkmark accessory
