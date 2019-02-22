@@ -43,10 +43,15 @@ class ToDoListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
         let thisAction = UIAlertAction(title: "Add Item", style: .default) { (action) in
              // what will happen when user clicks
+            //let regex = try! NSRegularExpression(pattern: ".*[^A-Za-z0-9].*")
+
+            //let userTypedInput = self.alertTextFieldInput.text;
             
             
-            if(self.alertTextFieldInput.text == "") {
-                 let alert2 = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
+       
+            
+            if(self.alertTextFieldInput.text == "" || (self.alertTextFieldInput.text?.trimmingCharacters(in: .whitespaces).isEmpty)!) { //if user did not enter new list
+                let alert2 = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
                 let oops = UIAlertAction(title: "Add Item", style: .default, handler: { (oopsies) in
                     print("must add item...")
                 })
