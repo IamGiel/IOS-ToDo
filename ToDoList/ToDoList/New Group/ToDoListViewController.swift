@@ -11,19 +11,24 @@ import UIKit
 class ToDoListViewController: UITableViewController {
     
     var itemArray = [Item]() //array of item objects
-    let defaults = UserDefaults.standard;
+    //let defaults = UserDefaults.standard;
  
-    
     var alertTextFieldInput = UITextField()
+    
+    //an object that provides an interface to the filesystem
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("items.plist")
+    
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        // Here we create our own plist file called items.plist, we deleted our reference to userDefaults
+        print(dataFilePath!)
+        
 
         let newItem = Item();
         newItem.title = "Find Shiela"
-        newItem.isDone = true;
         itemArray.append(newItem)
         
         let newItem2 = Item();
@@ -33,6 +38,10 @@ class ToDoListViewController: UITableViewController {
         let newItem3 = Item();
         newItem3.title = "Find Heidi"
         itemArray.append(newItem3)
+        
+//        if let items = defaults.array(forKey: "ToDoListArray") as? [Item] {
+//            itemArray = items
+//        }
         
     }
     
@@ -61,7 +70,7 @@ class ToDoListViewController: UITableViewController {
     
     @IBAction func addToDoItem(_ sender: UIBarButtonItem) {
         
-        let textField = UITextField()
+        // let textField = UITextField()
         
         let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
         let thisAction = UIAlertAction(title: "Add Item", style: .default) { (action) in
@@ -77,16 +86,13 @@ class ToDoListViewController: UITableViewController {
             } else {
                 print("success!")
                 let newItem = Item()
-                newItem.title = textField.text!
+                newItem.title = self.alertTextFieldInput.text!
                 self.itemArray.append(newItem)
-                self.defaults.set(self.itemArray, forKey: "ToDoListArray")
-                
-                print(self.itemArray);
-                self.tableView.reloadData();
+                //self.defaults.set(self.itemArray, forKey: "ToDoListArray")
+                self.saveData()
             }
-            
-            
         }
+        
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "im doing this..."
             //alertTextField.text
@@ -103,9 +109,24 @@ class ToDoListViewController: UITableViewController {
         
         itemArray[indexPath.row].isDone = !itemArray[indexPath.row].isDone
         
-        tableView.reloadData();
+        saveData()
         tableView.deselectRow(at: indexPath, animated: true)
 
+    }
+    
+    func saveData(){
+        let encoder = PropertyListEncoder()
+        
+        do {
+            let data = try encoder.encode(itemArray)
+            try data.write(to: dataFilePath!)
+            print(itemArray);
+           
+        } catch {
+            print("error has occured \(error)")
+        }
+        
+        tableView.reloadData();
     }
 }
     
