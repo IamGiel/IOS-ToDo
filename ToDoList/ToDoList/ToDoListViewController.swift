@@ -11,6 +11,7 @@ import UIKit
 class ToDoListViewController: UITableViewController {
     
     var itemArray = ["Draw a design", "Buy groceries", "Sing a song"];
+    let defaults = UserDefaults.standard;
     
     var alertTextFieldInput = UITextField()
     
@@ -18,6 +19,10 @@ class ToDoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        if let items = (defaults.array(forKey: "ToDoListArray") as? [String]){
+            itemArray = items;
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -43,13 +48,6 @@ class ToDoListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
         let thisAction = UIAlertAction(title: "Add Item", style: .default) { (action) in
              // what will happen when user clicks
-            //let regex = try! NSRegularExpression(pattern: ".*[^A-Za-z0-9].*")
-
-            //let userTypedInput = self.alertTextFieldInput.text;
-            
-            
-       
-            
             if(self.alertTextFieldInput.text == "" || (self.alertTextFieldInput.text?.trimmingCharacters(in: .whitespaces).isEmpty)!) { //if user did not enter new list
                 let alert2 = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
                 let oops = UIAlertAction(title: "Add Item", style: .default, handler: { (oopsies) in
@@ -61,6 +59,8 @@ class ToDoListViewController: UITableViewController {
             } else {
                 print("success!")
                 self.itemArray.append(self.alertTextFieldInput.text!)
+                self.defaults.set(self.itemArray, forKey: "ToDoListArray")
+                
                 print(self.itemArray);
                 self.tableView.reloadData();
             }
