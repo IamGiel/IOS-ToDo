@@ -9,7 +9,7 @@
 import Foundation
 
 
-class Item: Encodable { //mark this class conforming in Encodable,  this means that the item type is now able to encode itself into a P list or into a Jason and for
+class Item: Codable { //mark this class conforming in Encodable,  this means that the item type is now able to encode itself into a P list or into a Jason and for
     
     //TODO: Messages need a messageBody and a sender variable
     var title: String = "";

@@ -26,22 +26,11 @@ class ToDoListViewController: UITableViewController {
         // Here we create our own plist file called items.plist, we deleted our reference to userDefaults
         print(dataFilePath!)
         
-
-        let newItem = Item();
-        newItem.title = "Find Shiela"
-        itemArray.append(newItem)
-        
-        let newItem2 = Item();
-        newItem2.title = "Find Jay"
-        itemArray.append(newItem2)
-        
-        let newItem3 = Item();
-        newItem3.title = "Find Heidi"
-        itemArray.append(newItem3)
-        
 //        if let items = defaults.array(forKey: "ToDoListArray") as? [Item] {
 //            itemArray = items
 //        }
+        
+        loadItems()
         
     }
     
@@ -127,6 +116,17 @@ class ToDoListViewController: UITableViewController {
         }
         
         tableView.reloadData();
+    }
+    
+    func loadItems(){
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder();
+            do {
+                itemArray = try decoder.decode([Item].self, from: data)
+            } catch {
+                print("printing \(error)")
+            }
+        }
     }
 }
     
