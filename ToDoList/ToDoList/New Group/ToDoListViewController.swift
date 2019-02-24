@@ -7,13 +7,15 @@
 //
 
 import UIKit
+import CoreData
 
+@available(iOS 10.0, *)
 class ToDoListViewController: UITableViewController {
     
     var itemArray = [Item]() //array of item objects
-    //let defaults = UserDefaults.standard;
- 
     var alertTextFieldInput = UITextField()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+
     
     //an object that provides an interface to the filesystem
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("items.plist")
@@ -26,11 +28,7 @@ class ToDoListViewController: UITableViewController {
         // Here we create our own plist file called items.plist, we deleted our reference to userDefaults
         print(dataFilePath!)
         
-//        if let items = defaults.array(forKey: "ToDoListArray") as? [Item] {
-//            itemArray = items
-//        }
-        
-        loadItems()
+        //loadItems()
         
     }
     
@@ -56,7 +54,6 @@ class ToDoListViewController: UITableViewController {
     }
     
     //MARK: add new items
-    
     @IBAction func addToDoItem(_ sender: UIBarButtonItem) {
         
         // let textField = UITextField()
@@ -74,8 +71,10 @@ class ToDoListViewController: UITableViewController {
                 
             } else {
                 print("success!")
-                let newItem = Item()
+                
+                let newItem = Item(context: self.context)
                 newItem.title = self.alertTextFieldInput.text!
+                newItem.isDone = false;
                 self.itemArray.append(newItem)
                 //self.defaults.set(self.itemArray, forKey: "ToDoListArray")
                 self.saveData()
@@ -104,13 +103,10 @@ class ToDoListViewController: UITableViewController {
     }
     
     func saveData(){
-        let encoder = PropertyListEncoder()
         
         do {
-            let data = try encoder.encode(itemArray)
-            try data.write(to: dataFilePath!)
-            print(itemArray);
-           
+            //commit our context to our storage
+            try context.save()
         } catch {
             print("error has occured \(error)")
         }
@@ -118,16 +114,16 @@ class ToDoListViewController: UITableViewController {
         tableView.reloadData();
     }
     
-    func loadItems(){
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder();
-            do {
-                itemArray = try decoder.decode([Item].self, from: data)
-            } catch {
-                print("printing \(error)")
-            }
-        }
-    }
+//    func loadItems(){
+//        if let data = try? Data(contentsOf: dataFilePath!) {
+//            let decoder = PropertyListDecoder();
+//            do {
+//                itemArray = try decoder.decode([Item].self, from: data)
+//            } catch {
+//                print("printing \(error)")
+//            }
+//        }
+//    }
 }
     
 
