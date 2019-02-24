@@ -10,3 +10,5 @@ Codable // storing small amounts of custom objects and saing it into plist file
 CoreData
 SQLite
 REALM
+
+Completed: Save Data using CoreData: 238
