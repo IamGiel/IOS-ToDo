@@ -12,3 +12,5 @@ SQLite
 REALM
 
 Completed: Save Data using CoreData: 238
+Completed: CRUD in CoreData - persistentContainer.viewContext - external internal paramters with default value
+`//MARK: external internal paramters with default value func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()){ do { itemArray = try context.fetch(request); // like context.save() we need to add "try" and encapsulate it in a do catch block } catch { print("error in fetching data requests = ", error) } }`
