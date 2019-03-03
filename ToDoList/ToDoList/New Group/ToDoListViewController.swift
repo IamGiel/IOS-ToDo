@@ -27,8 +27,10 @@ class ToDoListViewController: UITableViewController {
         // Do any additional setup after loading the view, typically from a nib.
         // Here we create our own plist file called items.plist, we deleted our reference to userDefaults
         print(dataFilePath!)
+        //path where the data is being stored in this app
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-        //loadItems()
+        loadItems()
         
     }
     
@@ -95,8 +97,10 @@ class ToDoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        itemArray[indexPath.row].isDone = !itemArray[indexPath.row].isDone
+         itemArray[indexPath.row].isDone = !itemArray[indexPath.row].isDone
         
+        //context.delete(itemArray[indexPath.row]); //method to remove the data, sepecify the NSManage object at current row
+        //itemArray.remove(at: indexPath.row) //remove items in a particular index
         saveData()
         tableView.deselectRow(at: indexPath, animated: true)
 
@@ -114,7 +118,17 @@ class ToDoListViewController: UITableViewController {
         tableView.reloadData();
     }
     
-//    func loadItems(){
+    func loadItems(){
+        let requests: NSFetchRequest<Item> = Item.fetchRequest() //sepcify the datatype (Entity your tryting to request) Here its <Item>
+        
+        do {
+            itemArray = try context.fetch(requests); // like context.save() we need to add "try" and encapsulate it in a do catch block
+        } catch {
+            print("error in fetching data requests = ", error)
+        }
+        
+       
+        
 //        if let data = try? Data(contentsOf: dataFilePath!) {
 //            let decoder = PropertyListDecoder();
 //            do {
@@ -123,7 +137,7 @@ class ToDoListViewController: UITableViewController {
 //                print("printing \(error)")
 //            }
 //        }
-//    }
+    }
 }
     
 
