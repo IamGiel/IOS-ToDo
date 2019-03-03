@@ -15,13 +15,12 @@ class ToDoListViewController: UITableViewController {
     var itemArray = [Item]() //array of item objects
     var alertTextFieldInput = UITextField()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
     
     //an object that provides an interface to the filesystem
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("items.plist")
     
+    @IBOutlet weak var SearchBar: UISearchBar!
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -29,6 +28,9 @@ class ToDoListViewController: UITableViewController {
         print(dataFilePath!)
         //path where the data is being stored in this app
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        
+        //set tableview as a delegate of the search bar controller
+        SearchBar.delegate = self;
         
         loadItems()
         
@@ -137,6 +139,22 @@ class ToDoListViewController: UITableViewController {
 //                print("printing \(error)")
 //            }
 //        }
+    }
+}
+
+
+//MARK: search methods
+@available(iOS 10.0, *)
+extension ToDoListViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        //request fetch
+        let requests: NSFetchRequest<Item> = Item.fetchRequest()
+        print(SearchBar.text!)
+        //MARK: NSPredicates
+        //in order to query objects in core data we use NSPreidcates
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@" , SearchBar.text!);
+        //add request to our predicate
+        requests.predicate = predicate;
     }
 }
     
