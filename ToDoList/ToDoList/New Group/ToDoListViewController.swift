@@ -12,14 +12,13 @@ import CoreData
 @available(iOS 10.0, *)
 class ToDoListViewController: UITableViewController {
     
+    @IBOutlet weak var searchBar: UISearchBar!
     var itemArray = [Item]() //array of item objects
     var alertTextFieldInput = UITextField()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     //an object that provides an interface to the filesystem
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("items.plist")
-    
-    @IBOutlet weak var SearchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,8 +29,7 @@ class ToDoListViewController: UITableViewController {
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
         //set tableview as a delegate of the search bar controller
-        SearchBar.delegate = self;
-        
+        searchBar.delegate = self;
         loadItems()
         
     }
@@ -101,11 +99,11 @@ class ToDoListViewController: UITableViewController {
         
          itemArray[indexPath.row].isDone = !itemArray[indexPath.row].isDone
         
+        
+        //MARK: Delete data
         //context.delete(itemArray[indexPath.row]); //method to remove the data, sepecify the NSManage object at current row
         //itemArray.remove(at: indexPath.row) //remove items in a particular index
         saveData()
-        tableView.deselectRow(at: indexPath, animated: true)
-
     }
     
     func saveData(){
@@ -120,25 +118,13 @@ class ToDoListViewController: UITableViewController {
         tableView.reloadData();
     }
     
-    func loadItems(){
-        let requests: NSFetchRequest<Item> = Item.fetchRequest() //sepcify the datatype (Entity your tryting to request) Here its <Item>
-        
+    //MARK: external internal paramters with default value
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()){
         do {
-            itemArray = try context.fetch(requests); // like context.save() we need to add "try" and encapsulate it in a do catch block
+            itemArray = try context.fetch(request); // like context.save() we need to add "try" and encapsulate it in a do catch block
         } catch {
             print("error in fetching data requests = ", error)
         }
-        
-       
-        
-//        if let data = try? Data(contentsOf: dataFilePath!) {
-//            let decoder = PropertyListDecoder();
-//            do {
-//                itemArray = try decoder.decode([Item].self, from: data)
-//            } catch {
-//                print("printing \(error)")
-//            }
-//        }
     }
 }
 
@@ -146,16 +132,21 @@ class ToDoListViewController: UITableViewController {
 //MARK: search methods
 @available(iOS 10.0, *)
 extension ToDoListViewController: UISearchBarDelegate {
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        //request fetch
-        let requests: NSFetchRequest<Item> = Item.fetchRequest()
-        print(SearchBar.text!)
-        //MARK: NSPredicates
+        
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        //MARK: NSPredicates =  Foundation class that specifies how data should be fetched or filtered. Its query language, which is like a cross between a SQL WHERE clause and a regular expression
         //in order to query objects in core data we use NSPreidcates
-        let predicate = NSPredicate(format: "title CONTAINS[cd] %@" , SearchBar.text!);
-        //add request to our predicate
-        requests.predicate = predicate;
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@" , searchBar.text!);
+        //MARK: Sort using NSSortDescriptor
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        //add sortDescriptors(plural) to our requests
+        
+        //Now fetch data with the rules that we specified in previous lines
+        loadItems(with: request)
     }
+    
 }
     
 
