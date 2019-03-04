@@ -125,6 +125,8 @@ class ToDoListViewController: UITableViewController {
         } catch {
             print("error in fetching data requests = ", error)
         }
+        
+        tableView.reloadData()
     }
 }
 
@@ -135,16 +137,33 @@ extension ToDoListViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        let requestWithRule: NSFetchRequest<Item> = Item.fetchRequest()
         //MARK: NSPredicates =  Foundation class that specifies how data should be fetched or filtered. Its query language, which is like a cross between a SQL WHERE clause and a regular expression
         //in order to query objects in core data we use NSPreidcates
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@" , searchBar.text!);
+        requestWithRule.predicate = NSPredicate(format: "title CONTAINS[cd] %@" , searchBar.text!);
         //MARK: Sort using NSSortDescriptor
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        requestWithRule.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         //add sortDescriptors(plural) to our requests
+        print("printing request with rule ", requestWithRule)
+        print("this is item, Array ", itemArray)
         
         //Now fetch data with the rules that we specified in previous lines
-        loadItems(with: request)
+        loadItems(with: requestWithRule)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if (searchBar.text?.count == 0){
+           
+            loadItems()
+            
+            //Mark: ResignFirstResponder
+            //removes keyboard and cursor when textDidChange function is called
+            DispatchQueue.main.async {
+                 print("dispatch que, resignFirstResponder")
+                searchBar.resignFirstResponder() // go to the state it was in before it was accessed
+            }
+            
+        }
     }
     
 }
