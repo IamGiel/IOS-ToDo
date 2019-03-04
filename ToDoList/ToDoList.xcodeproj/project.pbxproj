@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FC5A9F9C222202A400AD7817 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC5A9F9A222202A400AD7817 /* DataModel.xcdatamodeld */; };
+		FC78CEA4222DA51E005F24A6 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC78CEA3222DA51E005F24A6 /* CategoryTableViewController.swift */; };
 		FCC85A6D221C86CB008CADF3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC85A6C221C86CB008CADF3 /* AppDelegate.swift */; };
 		FCC85A6F221C86CB008CADF3 /* ToDoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC85A6E221C86CB008CADF3 /* ToDoListViewController.swift */; };
 		FCC85A72221C86CB008CADF3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCC85A70221C86CB008CADF3 /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		FC5A9F9B222202A400AD7817 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		FC78CEA3222DA51E005F24A6 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 		FCC85A69221C86CB008CADF3 /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCC85A6C221C86CB008CADF3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FCC85A6E221C86CB008CADF3 /* ToDoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListViewController.swift; sourceTree = "<group>"; };
@@ -48,6 +50,7 @@
 		FC5A9F762221D9A000AD7817 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				FC78CEA3222DA51E005F24A6 /* CategoryTableViewController.swift */,
 				FCC85A6E221C86CB008CADF3 /* ToDoListViewController.swift */,
 			);
 			name = Controller;
@@ -174,6 +177,7 @@
 				FCC85A6F221C86CB008CADF3 /* ToDoListViewController.swift in Sources */,
 				FC5A9F9C222202A400AD7817 /* DataModel.xcdatamodeld in Sources */,
 				FCC85A6D221C86CB008CADF3 /* AppDelegate.swift in Sources */,
+				FC78CEA4222DA51E005F24A6 /* CategoryTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
